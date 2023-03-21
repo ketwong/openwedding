@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Getting Started</h1>
+        <div class="step step-1">
+            <p>Please enter an integer:</p>
+            <input type="number" id="integer-input" step="1">
+            <button class="proceed-button" id="proceed-to-step-2">Proceed</button>
+        </div>
+        <div class="step step-2" hidden>
+            <p>Select an option:</p>
+            <div class="button-group">
+                <button class="option-button" data-option="1">Option 1</button>
+                <button class="option-button" data-option="2">Option 2</button>
+            </div>
+            <button class="proceed-button" id="proceed-to-step-3" hidden>Proceed</button>
+        </div>
+        <div class="step step-3" hidden>
+            <h2>Results</h2>
+            <p>Entered integer: <span id="result-integer"></span></p>
+            <p>Selected option: <span id="result-option"></span></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
