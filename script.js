@@ -1,49 +1,65 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const integerInput = document.getElementById("integer-input");
-    const proceedToStep2 = document.getElementById("proceed-to-step-2");
-    const step1 = document.querySelector(".step-1");
-    const step2 = document.querySelector(".step-2");
+const form = document.getElementById("wedding-planner-form");
+const fieldsets = Array.from(form.querySelectorAll("fieldset"));
+const previousButton = document.getElementById("previous-button");
+const nextButton = document.getElementById("next-button");
+const submitButton = document.getElementById("submit-button");
 
-    const optionButtons = document.querySelectorAll(".option-button");
-    const proceedToStep3 = document.getElementById("proceed-to-step-3");
+let currentStep = 0;
 
-    const step3 = document.querySelector(".step-3");
-    const resultInteger = document.getElementById("result-integer");
-    const resultOption = document.getElementById("result-option");
+function showStep(step) {
+  fieldsets.forEach((fieldset, index) => {
+    fieldset.hidden = index !== step;
+  });
 
-    let enteredInteger;
-    let selectedOption;
+  previousButton.hidden = step === 0;
+  nextButton.hidden = step === fieldsets.length - 1;
+  submitButton.hidden = step !== fieldsets.length - 1;
+}
 
-    proceedToStep2.addEventListener("click", () => {
-        const integerValue = parseInt(integerInput.value);
-
-        if (!isNaN(integerValue) && Number.isInteger(integerValue)) {
-            enteredInteger = integerValue;
-            step1.hidden = true;
-            step2.hidden = false;
-        } else {
-            alert("Please enter a valid integer.");
-        }
-    });
-
-    optionButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            optionButtons.forEach((btn) => btn.classList.remove("selected"));
-            button.classList.add("selected");
-            selectedOption = button.dataset.option;
-            proceedToStep3.hidden = false;
-        });
-    });
-
-    proceedToStep3.addEventListener("click", () => {
-        // Display the results
-        resultInteger.textContent = enteredInteger;
-        resultOption.textContent = `Option ${selectedOption}`;
-
-        step2.hidden = true;
-        step3.hidden = false;
-
-        // Your logic here to navigate to the next page or capture more data
-        // ...
-    });
+previousButton.addEventListener("click", () => {
+  if (currentStep > 0) {
+    currentStep--;
+    showStep(currentStep);
+  }
 });
+
+nextButton.addEventListener("click", () => {
+  if (currentStep < fieldsets.length - 1) {
+    currentStep++;
+    showStep(currentStep);
+  }
+});
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  // Process the form data here
+  console.log("Form submitted");
+});
+
+const resultsList = document.getElementById("results-list");
+
+function displayResults() {
+  const formData = new FormData(form);
+  const results = [];
+
+  formData.forEach((value, key) => {
+    results.push(`<li><strong>${key.replace(/_/g, " ")}:</strong> ${value}</li>`);
+  });
+
+  resultsList.innerHTML = results.join("");
+}
+
+nextButton.addEventListener("click", () => {
+  if (currentStep < fieldsets.length - 1) {
+    currentStep++;
+    showStep(currentStep);
+  }
+
+  if (currentStep === fieldsets.length - 2) {
+    displayResults();
+  }
+});
+
+
+showStep(currentStep);
