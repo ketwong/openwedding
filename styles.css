@@ -86,3 +86,32 @@ textarea {
   background-color: #6c757d;
   cursor: not-allowed;
 }
+
+/* Month Buttons */
+.month-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.month-button {
+  padding: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.month-button:hover {
+  background-color: #e9ecef;
+}
+
+.month-button.selected {
+  background-color: #3498db;
+  color: white;
+}

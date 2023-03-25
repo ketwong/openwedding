@@ -119,3 +119,17 @@ form.addEventListener("submit", (event) => {
   // Redirect or show a success message
   alert("Form submitted successfully!");
 });
+
+document.querySelectorAll(".month-button").forEach((button) => {
+  button.addEventListener("click", (event) => {
+    const month = event.target.getAttribute("data-month");
+    document.getElementById("selected-month").value = month;
+
+    // Add selected class to the clicked button and remove it from others
+    document.querySelectorAll(".month-button").forEach((btn) => {
+      btn.classList.remove("selected");
+    });
+    event.target.classList.add("selected");
+  });
+});
+
