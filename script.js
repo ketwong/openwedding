@@ -30,18 +30,11 @@ nextButton.addEventListener("click", () => {
     currentStep++;
     showStep(currentStep);
   }
+
+  if (currentStep === fieldsets.length - 2) {
+    displayResults();
+  }
 });
-
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  // Process the form data here
-  console.log("Form submitted");
-});
-
-showStep(currentStep);
-
-const resultsList = document.getElementById("results-list");
 
 function displayResults() {
   const formData = new FormData(form);
@@ -54,46 +47,16 @@ function displayResults() {
   resultsList.innerHTML = results.join("");
 }
 
-nextButton.addEventListener("click", () => {
-  if (currentStep < fieldsets.length - 1) {
-    currentStep++;
-    showStep(currentStep);
-  }
-
-  if (currentStep === fieldsets.length - 2) {
-    displayResults();
-  }
-});
-
 form.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  // Save the data to Local Storage
-  const formData = new FormData(form);
-  const data = {};
-
-  formData.forEach((value, key) => {
-    data[key] = value;
-  });
-
-  localStorage.setItem("weddingPlannerData", JSON.stringify(data));
+  // Export the data to a CSV file
+  const csvData = exportFormDataToCSV();
+  downloadCSV("wedding_planner_data.csv", csvData);
 
   // Redirect or show a success message
   alert("Form submitted successfully!");
 });
-
-function downloadCSV(filename, data) {
-  const csvData = new Blob([data], { type: "text/csv;charset=utf-8;" });
-  const csvURL = URL.createObjectURL(csvData);
-  const tempLink = document.createElement("a");
-
-  tempLink.href = csvURL;
-  tempLink.setAttribute("download", filename);
-  tempLink.style.display = "none";
-  document.body.appendChild(tempLink);
-  tempLink.click();
-  document.body.removeChild(tempLink);
-}
 
 function exportFormDataToCSV() {
   const formData = new FormData(form);
@@ -111,27 +74,33 @@ function exportFormDataToCSV() {
   return header + data;
 }
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
+function downloadCSV(filename, data) {
+  const csvData = new Blob([data], { type: "text/csv;charset=utf-8;" });
+  const csvURL = URL.createObjectURL(csvData);
+  const tempLink = document.createElement("a");
 
-  // Export the data to a CSV file
-  const csvData = exportFormDataToCSV();
-  downloadCSV("wedding_planner_data.csv", csvData);
+  tempLink.href = csvURL;
+  tempLink.setAttribute("download", filename);
+  tempLink.style.display = "none";
+  document.body.appendChild(tempLink);
+  tempLink.click();
+  document.body.removeChild(tempLink);
+}
 
-  // Redirect or show a success message
-  alert("Form submitted successfully!");
-});
-
-document.querySelectorAll(".month-button").forEach((button) => {
+monthButtons.forEach((button) => {
   button.addEventListener("click", (event) => {
-    const month = event.target.getAttribute("data-month");
-    document.getElementById("selected-month").value = month;
+    const selectedMonth = event.target.getAttribute("data-month");
 
-    // Add selected class to the clicked button and remove it from others
-    document.querySelectorAll(".month-button").forEach((btn) => {
-      btn.classList.remove("selected");
+    monthButtons.forEach((btn) => {
+      if (btn === event.target) {
+        btn.classList.add("selected");
+      } else {
+        btn.classList.remove("selected");
+      }
     });
-    event.target.classList.add("selected");
+
+    selectedMonthInput.value = selectedMonth;
   });
 });
 
+showStep(currentStep);
