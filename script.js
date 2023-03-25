@@ -37,6 +37,8 @@ form.addEventListener("submit", (event) => {
   console.log("Form submitted");
 });
 
+showStep(currentStep);
+
 const resultsList = document.getElementById("results-list");
 
 function displayResults() {
@@ -61,5 +63,59 @@ nextButton.addEventListener("click", () => {
   }
 });
 
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
 
-showStep(currentStep);
+  // Save the data to Local Storage
+  const formData = new FormData(form);
+  const data = {};
+
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
+
+  localStorage.setItem("weddingPlannerData", JSON.stringify(data));
+
+  // Redirect or show a success message
+  alert("Form submitted successfully!");
+});
+
+function downloadCSV(filename, data) {
+  const csvData = new Blob([data], { type: "text/csv;charset=utf-8;" });
+  const csvURL = URL.createObjectURL(csvData);
+  const tempLink = document.createElement("a");
+
+  tempLink.href = csvURL;
+  tempLink.setAttribute("download", filename);
+  tempLink.style.display = "none";
+  document.body.appendChild(tempLink);
+  tempLink.click();
+  document.body.removeChild(tempLink);
+}
+
+function exportFormDataToCSV() {
+  const formData = new FormData(form);
+  const keys = [];
+  const values = [];
+
+  formData.forEach((value, key) => {
+    keys.push(key);
+    values.push(value);
+  });
+
+  const header = keys.join(",") + "\n";
+  const data = values.join(",") + "\n";
+
+  return header + data;
+}
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  // Export the data to a CSV file
+  const csvData = exportFormDataToCSV();
+  downloadCSV("wedding_planner_data.csv", csvData);
+
+  // Redirect or show a success message
+  alert("Form submitted successfully!");
+});
