@@ -5,6 +5,7 @@ const nextButton = document.getElementById("next-button");
 const submitButton = document.getElementById("submit-button");
 const monthButtons = document.querySelectorAll(".month-button");
 const selectedMonthInput = document.getElementById("selected-month");
+const resultsList = document.getElementById("results-list");
 
 let currentStep = 0;
 
